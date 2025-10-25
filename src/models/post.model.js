@@ -11,8 +11,14 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     tags: {
-      type: Array,
+      type: [String],
       required: true,
+      validate: {
+        validator: function (value) {
+          return Array.isArray(value) && value.length > 0;
+        },
+        message: "Tags array must have at least one tag",
+      },
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +26,9 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     likes: {
-      type: Array,
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
     },
   },
   { timestamps: true }
